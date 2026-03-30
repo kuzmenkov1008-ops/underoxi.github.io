@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила сервера - UNDEROXI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #0a0e1a;
+            --secondary-dark: #111827;
+            --card-bg: #1a1f2e;
+            --accent-yellow: #ffc107;
+            --accent-hover: #ffb300;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --border-color: #2d3748;
+            --success-green: #10b981;
+            --error-red: #ef4444;
+            --warning-orange: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 193, 7, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 193, 7, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            background: rgba(10, 14, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-yellow), #ff9800);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--secondary-dark);
+            color: var(--text-primary);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .discord-btn {
+            width: 45px;
+            height: 45px;
+            background: #5865F2;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(88, 101, 242, 0.4);
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, var(--accent-yellow), #ff9800);
+            color: var(--primary-dark);
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 193, 7, 0.4);
+        }
+
+        .page-header {
+            margin-top: 100px;
+            padding: 4rem 5%;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-yellow), #ff9800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .rules-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 5%;
+        }
+
+        .rules-intro {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.05));
+            border: 2px solid var(--accent-yellow);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .rules-intro h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--accent-yellow);
+        }
+
+        .rules-intro p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .rules-intro strong {
+            color: var(--text-primary);
+        }
+
+        .rules-grid {
+            display: grid;
+            gap: 2.5rem;
+        }
+
+        .rule-category {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .rule-category:hover {
+            border-color: var(--accent-yellow);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, var(--secondary-dark), var(--card-bg));
+            padding: 1.75rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-yellow), #ff9800);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+
+        .category-title {
+            flex: 1;
+        }
+
+        .category-title h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .category-title p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .category-content {
+            padding: 2rem;
+        }
+
+        .rule-subsection {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--secondary-dark);
+            border-radius: 16px;
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .rule-subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .rule-subsection h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rule-subsection ul {
+            list-style: none;
+            margin-left: 0.5rem;
+        }
+
+        .rule-subsection ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .rule-subsection ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent-yellow);
+            font-weight: bold;
+        }
+
+        .software-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .software-item {
+            background: var(--primary-dark);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .software-item.forbidden {
+            border-color: var(--error-red);
+            color: #fca5a5;
+        }
+
+        .software-item.forbidden::before {
+            content: '✕';
+            color: var(--error-red);
+            font-weight: bold;
+        }
+
+        .software-item.allowed {
+            border-color: var(--success-green);
+            color: #6ee7b7;
+        }
+
+        .software-item.allowed::before {
+            content: '✓';
+            color: var(--success-green);
+            font-weight: bold;
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-red);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .warning-box h4 {
+            color: var(--error-red);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warning-box p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .faq-section {
+            margin-top: 4rem;
+        }
+
+        .faq-section h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent-yellow), #ff9800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--secondary-dark);
+        }
+
+        .faq-question h3 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .faq-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, var(--accent-yellow), #ff9800);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            padding: 0 2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 2rem 1.5rem;
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .cta-section {
+            background: var(--secondary-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--accent-yellow), #ff9800);
+            color: var(--primary-dark);
+            border: none;
+            padding: 1.25rem 2.5rem;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 193, 7, 0.4);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            padding: 1.25rem 2.5rem;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--accent-yellow);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            padding: 3rem 5%;
+            text-align: center;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: var(--accent-yellow);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header {
+                margin-top: 80px;
+                padding: 2rem 5%;
+            }
+
+            .rules-intro {
+                padding: 1.5rem;
+            }
+
+            .category-header {
+                padding: 1.25rem;
+            }
+
+            .category-content {
+                padding: 1.25rem;
+            }
+
+            .software-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-question {
+                padding: 1.25rem;
+            }
+
+            .faq-answer {
+                padding: 0 1.25rem;
+            }
+
+            .faq-item.active .faq-answer {
+                padding: 0 1.25rem 1.25rem;
+            }
+
+            .cta-section {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <nav>
+        <a href="index.html" class="logo">
+            <div class="logo-icon">⚔️</div>
+            UNDEROXI
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">О сервере</a></li>
+            <li><a href="application.html">Заявка</a></li>
+            <li><a href="rules.html" class="active">Правила</a></li>
+            <li><a href="support.html">Поддержка</a></li>
+        </ul>
+        
+        <div class="nav-buttons">
+            <button class="discord-btn" onclick="window.open('https://discord.gg/yourserver', '_blank')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+            </button>
+            <a href="index.html#play" class="play-btn">
+                <span>🎮</span>
+                Начать игру
+            </a>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>ПРАВИЛА СЕРВЕРА</h1>
+        <p>Внимательно изучи правила перед игрой на сервере</p>
+    </div>
+
+    <div class="rules-container">
+        <div class="rules-intro">
+            <h2>⚠️ Важная информация</h2>
+            <p>
+                Незнание правил <strong>не освобождает</strong> от ответственности. 
+                Играя на сервере, вы автоматически соглашаетесь со всеми правилами. 
+                Администрация оставляет за собой право изменять правила без предварительного уведомления.
+            </p>
+        </div>
+
+        <div class="rules-grid">
+            
+            <!-- Категория 1: Правила Спавна -->
+            <div class="rule-category">
+                <div class="category-header">
+                    <div class="category-icon">🏛️</div>
+                    <div class="category-title">
+                        <h3>Правила Спавна</h3>
+                        <p>Территория безопасности и комфорта</p>
+                    </div>
+                </div>
+                <div class="category-content">
+                    <div class="rule-subsection">
+                        <h4>1.1 🏗️ Гриферство</h4>
+                        <ul>
+                            <li>Не ломайте чужие постройки и декорации.</li>
+                            <li>Не портите ландшафт и функциональные элементы спавна.</li>
+                            <li>Не перемещайте предметы или блоки, установленные другими игроками.</li>
+                            <li>Сохраняйте внешний вид спавна удобным и красивым для всех.</li>
+                            <li><strong>Важно:</strong> Все радиусом 130 блоков от координат 0 90 0 является территорией спавна, на ней строиться нельзя.</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-subsection">
+                        <h4>1.2 ⚔️ PvP</h4>
+                        <ul>
+                            <li>Не используйте спавн для сражений между игроками.</li>
+                            <li>Не провоцируйте других на драки и конфликты.</li>
+                            <li>Не кидайте заряды ветра или другие предметы, провоцируя игроков.</li>
+                            <li>Старайтесь сохранять спокойную и безопасную атмосферу на спавне.</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-subsection">
+                        <h4>1.3 🛡️ Воровство и личные вещи</h4>
+                        <ul>
+                            <li>Не трогайте сундуки и личные вещи других игроков.</li>
+                            <li>Не используйте чужие ресурсы без разрешения.</li>
+                            <li>Уважайте личное пространство каждого игрока.</li>
+                            <li>Если находите оставленные предметы, не забирайте их без согласия владельца.</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-subsection">
+                        <h4>1.4 🚫 Запретные территории</h4>
+                        <ul>
+                            <li>Не заходите в зоны, помеченные как ограниченные.</li>
+                            <li>Следите за знаками и предупреждениями о недоступных местах.</li>
+                            <li>Не исследуйте и не изменяйте территорию, которая не предназначена для игроков.</li>
+                            <li>Соблюдайте границы и правила использования спавна.</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-subsection">
+                        <h4>1.5 🔊 Поведение на спавне</h4>
+                        <ul>
+                            <li>Сохраняйте спокойствие и корректное общение с другими игроками.</li>
+                            <li>Не создавайте громкие или раздражающие звуки.</li>
+                            <li>Не мешайте другим игрокам своими действиями или предметами.</li>
+                            <li>Не мусорьте на спавне.</li>
+                            <li>Не создавайте лаг-машины под, над или на высоте спавна.</li>
+                            <li>Будьте вежливы и уважительны ко всем на спавне.</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>💡 Важно</h4>
+                        <p>Соблюдение этих правил помогает поддерживать порядок, безопасность и комфорт для всех игроков на спавне.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Категория 2: Запрещённое ПО -->
+            <div class="rule-category">
+                <div class="category-header">
+                    <div class="category-icon">🚫</div>
+                    <div class="category-title">
+                        <h3>Запрещённое ПО</h3>
+                        <p>Честная игра без преимуществ</p>
+                    </div>
+                </div>
+                <div class="category-content">
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        Запрещённым ПО являются модификации, выполняющие действия за игрока, дающие преимущество или нарушающие целостность игры.
+                    </p>
+
+                    <div class="rule-subsection">
+                        <h4>Основные запреты</h4>
+                        <ul>
+                            <li>Модификации, выполняющие действия за игрока (ИИ, принтер и т.п.)</li>
+                            <li>Программы, сайты и моды для использования и поиска сида мира</li>
+                            <li>Любой чит-клиент, X-Ray и подобные моды, которые дают большое преимущество</li>
+                            <li>Ресурс-паки, выполняющие те же функции, что и запрещённые моды</li>
+                        </ul>
+                    </div>
+
+                    <h4 style="color: var(--text-primary); margin: 1.5rem 0 1rem;">Полный список запрещённых модов:</h4>
+                    <div class="software-grid">
+                        <div class="software-item forbidden">No Mining Cooldown</div>
+                        <div class="software-item forbidden">Ghostblocks</div>
+                        <div class="software-item forbidden">Automatic tool swap</div>
+                        <div class="software-item forbidden">Inventorio</div>
+                        <div class="software-item forbidden">Trajectory preview</div>
+                        <div class="software-item forbidden">NoBurned</div>
+                        <div class="software-item forbidden">nofog / Lava Clear View</div>
+                        <div class="software-item forbidden">Librarian Trade Finder</div>
+                        <div class="software-item forbidden">JJElytraSwap</div>
+                        <div class="software-item forbidden">Моды на надевание предметов на голову</div>
+                        <div class="software-item forbidden">PrinterMod</div>
+                        <div class="software-item forbidden">Resource Scanner</div>
+                        <div class="software-item forbidden">InvMove</div>
+                        <div class="software-item forbidden">Chat Walk</div>
+                        <div class="software-item forbidden">StepUp</div>
+                        <div class="software-item forbidden">Bridging Mod</div>
+                        <div class="software-item forbidden">No darkness effect</div>
+                        <div class="software-item forbidden">Freecam (злоупотребление)</div>
+                        <div class="software-item forbidden">Minimap (поиск данжей/пещер)</div>
+                    </div>
+
+                    <div class="warning-box" style="border-color: var(--success-green); background: rgba(16, 185, 129, 0.1);">
+                        <h4 style="color: var(--success-green);">✅ Разрешённые исключения</h4>
+                        <p>Следующие моды разрешены к использованию:</p>
+                        <div class="software-grid" style="margin-top: 1rem;">
+                            <div class="software-item allowed">No Mining Cooldown</div>
+                            <div class="software-item allowed">Ghostblocks</div>
+                            <div class="software-item allowed">Automatic tool swap</div>
+                            <div class="software-item allowed">Inventorio</div>
+                            <div class="software-item allowed">Trajectory preview</div>
+                            <div class="software-item allowed">NoBurned</div>
+                            <div class="software-item allowed">nofog / Lava Clear View</div>
+                            <div class="software-item allowed">Librarian Trade Finder</div>
+                            <div class="software-item allowed">JJElytraSwap</div>
+                        </div>
+                        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                            * Обратите внимание: Freecam и Minimap разрешены, но злоупотребление ими (поиск данжей и пещер) запрещено.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Категория 3: Основные правила -->
+            <div class="rule-category">
+                <div class="category-header">
+                    <div class="category-icon">📜</div>
+                    <div class="category-title">
+                        <h3>Основные правила</h3>
+                        <p>Базовые нормы поведения</p>
+                    </div>
+                </div>
+                <div class="category-content">
+                    <div class="rule-subsection">
+                        <h4>Общение и поведение</h4>
+                        <ul>
+                            <li>Запрещено оскорблять других игроков и администрацию.</li>
+                            <li>Запрещена реклама других проектов без согласования.</li>
+                            <li>Запрещён спам в чате.</li>
+                            <li>Запрещены ники, содержащие нецензурную лексику или оскорбления.</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-subsection">
+                        <h4>Гриферство и приват</h4>
+                        <ul>
+                            <li>Запрещено разрушать чужие постройки вне спавна.</li>
+                            <li>Используй золотую лопату для привата территорий.</li>
+                            <li>Запрещены лаг-машины и механизмы, нагружающие сервер.</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-subsection">
+                        <h4>Аккаунты</h4>
+                        <ul>
+                            <li>Запрещено иметь несколько аккаунтов (мультиаккаунт).</li>
+                            <li>Запрещена передача аккаунта другим лицам.</li>
+                            <li>Вы несёте ответственность за все действия с вашего аккаунта.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2>ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>Как подать апелляцию на бан?</h3>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>Апелляции подаются через нашу форму на сайте или в Discord-канале #аппеляции. Укажи свой ник, причину бана и почему ты считаешь наказание несправедливым. Срок рассмотрения — до 7 дней.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>Можно ли использовать моды?</h3>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>Разрешены только клиентские моды из списка исключений (Inventorio, NoBurned и т.д.). Запрещены: X-Ray, KillAura, Fly и любые моды из списка запрещённого ПО.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>Как приватить территорию?</h3>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>Возьми золотую лопату и кликни дважды по диагонали территории, которую хочешь приватить. Введи команду /region claim &lt;название&gt;.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>Что делать, если меня загриферили?</h3>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>Немедленно сделай скриншоты повреждений, найди ник грифера (если возможно) и создай тикет в Discord или напиши администратору на сервере.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>Прочитал правила? Отлично!</h2>
+            <p>Теперь ты готов стать частью нашего сообщества</p>
+            <div class="cta-buttons">
+                <a href="application.html" class="primary-btn">
+                    <span>📝</span>
+                    Подать заявку
+                </a>
+                <a href="index.html" class="secondary-btn">
+                    <span>🎮</span>
+                    Начать играть
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 UNDEROXI. Все права защищены.</p>
+        <p style="margin-top: 0.5rem;">Не является официальным продуктом Minecraft. <a href="https://minecraft.net">Minecraft</a> — торговая марка Mojang AB.</p>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.rule-category').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `all 0.6s ease ${index * 0.1}s`;
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
